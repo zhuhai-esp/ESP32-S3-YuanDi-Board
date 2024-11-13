@@ -45,8 +45,7 @@ void inline autoConfigWifi() {
 
 void inline initAudioDevice() {
   audio.setPinout(I2S_BCLK, I2S_LRC, I2S_DOUT);
-  audio.setVolume(16);
-  // http://www.bbdj.com/
+  audio.setVolume(20, 1);
   auto url = "http://tspc.bbdj.com/2018/09/2/67950-545936/67950.m3u8";
   audio.connecttohost(url);
 }
@@ -54,8 +53,6 @@ void inline initAudioDevice() {
 void setup() {
   Serial.begin(115200);
   Serial.println("Hello ESP-S3!!");
-  psramInit();
-  Serial.printf("PSRAM size [%u]\n", ESP.getPsramSize());
   pixels.begin();
   pixels.setBrightness(10);
   pixels.clear();
