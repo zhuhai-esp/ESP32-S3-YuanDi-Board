@@ -5,20 +5,21 @@
 
 #define PIN_LED 48
 
-#define I2S_DOUT 18
-#define I2S_BCLK 4
-#define I2S_LRC 5
+#define I2S_SD 4
+#define I2S_DOUT 5
+#define I2S_BCLK 6
+#define I2S_LRC 7
 
 long check300ms = 0;
 Audio audio;
 
-Adafruit_NeoPixel pixels(1, PIN_LED, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel pixels(4, PIN_LED, NEO_GRB + NEO_KHZ800);
 uint32_t colors[] = {0xff0000, 0x00ff00, 0x0000ff,
                      0xffff00, 0x00ffff, 0x000000};
 uint8_t colorIndex = 0;
 
 void inline autoConfigWifi() {
-  pixels.setPixelColor(0, colors[0]);
+  pixels.fill(colors[0]);
   pixels.show();
   Serial.println("Start WiFi Connect!");
   WiFi.mode(WIFI_MODE_STA);
@@ -44,8 +45,10 @@ void inline autoConfigWifi() {
 }
 
 void inline initAudioDevice() {
+  pinMode(I2S_SD, OUTPUT);
+  digitalWrite(I2S_SD, HIGH);
   audio.setPinout(I2S_BCLK, I2S_LRC, I2S_DOUT);
-  audio.setVolume(20, 1);
+  audio.setVolume(16, 1);
   auto url = "http://tspc.bbdj.com/2018/09/2/67950-545936/67950.m3u8";
   audio.connecttohost(url);
 }
@@ -69,6 +72,7 @@ void loop() {
     pixels.setPixelColor(0, colors[colorIndex]);
     pixels.show();
     colorIndex = (colorIndex + 1) % 6;
+    //digitalWrite(I2S_SD, colorIndex % 2);
   }
 }
 
